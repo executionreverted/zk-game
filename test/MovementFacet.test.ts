@@ -70,7 +70,7 @@ describe("MovementFacet", function () {
       let dataResult = await exportCallDataGroth16(inputData, wasmCircuitPath, zkeyCircuit)
 
       console.log(`Solidity Calldata: \n `, dataResult);
-      await MovementFacet.move(...dataResult)
+      await MovementFacet.move(0,...dataResult)
       const newPos = await MovementFacet.getPlayerPos(0)
       console.log({ newPos });
       expect(newPos[0]).eq(inputData.newX)
@@ -91,9 +91,9 @@ describe("MovementFacet", function () {
         var dataResult = await exportCallDataGroth16(inputData2, wasmCircuitPath, zkeyCircuit)
       } catch (error: any) {
         console.log(error.message);
+        console.log(`Solidity Calldata: \n `, dataResult);
       }
 
-      console.log(`Solidity Calldata: \n `, dataResult);
       expect(dataResult).undefined
     });
   });
@@ -113,7 +113,7 @@ describe("MovementFacet", function () {
       let dataResult = await exportCallDataGroth16(inputData3, wasmCircuitPath, zkeyCircuit)
 
       console.log(`Solidity Calldata: \n `, dataResult);
-      await MovementFacet.move(...dataResult)
+      await MovementFacet.move(0,...dataResult)
       const newPos = await MovementFacet.getPlayerPos(0)
       console.log({ newPos });
       expect(newPos[0]).eq(inputData3.newX)

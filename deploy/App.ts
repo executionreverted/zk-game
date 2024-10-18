@@ -1,9 +1,9 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { MovementFacet } from "../typechain-types";
+import { MovementFacet, WeaponUpgradeFacet } from "../typechain-types";
 
 module.exports = async ({ getNamedAccounts, deployments, ethers, getChainId }: HardhatRuntimeEnvironment) => {
     const { diamond, deploy } = deployments;
-    const { deployer, diamondAdmin } = await getNamedAccounts();
+    const { deployer } = await getNamedAccounts();
     console.log(await getNamedAccounts());
 
     const DiamondAppInit = await deploy("DiamondAppInit", {
@@ -17,7 +17,7 @@ module.exports = async ({ getNamedAccounts, deployments, ethers, getChainId }: H
     var Diamond = await diamond.deploy('DiamondApp', {
         from: deployer,
         owner: deployer,
-        facets: ['VersionFacet', 'MovementFacet'],
+        facets: ['VersionFacet', 'MovementFacet', 'WeaponUpgradeFacet', 'WorldFacet'],
         log: true,
     });
     console.log("Diamond: ", Diamond.address);
@@ -33,11 +33,18 @@ module.exports = async ({ getNamedAccounts, deployments, ethers, getChainId }: H
     console.log('Setting MovementVerifier...');
     let MovementVerifier = await ethers.getContract("MovementVerifier")
     console.log(await MovementVerifier.getAddress());
-    
     let MovementFacet: MovementFacet = await ethers.getContractAt("MovementFacet", Diamond.address)
     await MovementFacet.setMovementVerifier(await MovementVerifier.getAddress())
+    console.log('MovementVerifier is set...');
+
+    console.log('Setting WeaponUpgradeVerifier...');
+    let WeaponUpgradeVerifier = await ethers.getContract("WeaponUpgradeVerifier")
+    console.log(await WeaponUpgradeVerifier.getAddress());
+    let WeaponUpgradeFacet: WeaponUpgradeFacet = await ethers.getContractAt("WeaponUpgradeFacet", Diamond.address)
+    await WeaponUpgradeFacet.setWeaponUpgradeVerifier(await WeaponUpgradeVerifier.getAddress())
+    console.log('WeaponUpgradeVerifier is set...');
 };
 
-module.exports.dependencies = ['MovementVerifier'];
+module.exports.dependencies = ['MovementVerifier', 'WeaponUpgradeVerifier'];
 module.exports.tags = ['DiamondApp'];
 

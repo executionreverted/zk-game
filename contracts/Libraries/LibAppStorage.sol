@@ -3,10 +3,16 @@ pragma solidity ^0.8.18;
 import {LibDiamond} from "../../shared/libraries/LibDiamond.sol";
 import {LibMeta} from "./LibMeta.sol";
 
+struct WeaponUpgradeData {
+    uint nonce;
+    uint upgradeLevel;
+}
+
 struct AppStorage {
     bytes32 version;
     mapping(uint => uint[2]) playerPositions;
     mapping(uint => address) verifierAddresses;
+    mapping(uint => WeaponUpgradeData) weaponUpgradeData;
 }
 
 library LibAppStorage {

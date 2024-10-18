@@ -8,6 +8,10 @@ template VerifyMove() {
     signal input newY;     // Player's new Y position
     signal input maxMoveDist;
     signal output out;
+    signal output startX;
+    signal output startY;
+    signal output finalX;
+    signal output finalY;
     
 
     signal maxMovSq;
@@ -22,6 +26,10 @@ template VerifyMove() {
     ltDist.in[1] <== maxMovSq;
     ltDist.out === 1;
     out <== ltDist.out;
+    startX <== playerX;
+    startY <== playerY;
+    finalX <== newX;
+    finalY <== newY;
 }
 
 component main = VerifyMove();

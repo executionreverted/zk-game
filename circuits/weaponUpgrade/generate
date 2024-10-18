@@ -1,0 +1,7 @@
+#!/bin/bash
+circom circuit.circom --r1cs --wasm --sym &&
+npx snarkjs r1cs info circuit.r1cs &&
+npx snarkjs zkey new circuit.r1cs ../pot15_final.ptau circuit_init.zkey &&
+npx snarkjs zkey contribute circuit_init.zkey circuit.zkey -e="$(date)" &&
+npx snarkjs zkey export verificationkey circuit.zkey verification_key.json &&
+npx snarkjs zkey export solidityverifier circuit.zkey verifier.sol
